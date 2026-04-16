@@ -1,0 +1,27 @@
+name: Java CI Smoke Test
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  smoke-test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout source
+        uses: actions/checkout@v4
+
+      - name: Setup JDK
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '8'
+          cache: maven
+
+      - name: Run smoke tests
+        run: mvn -B -Dtest=CalculatorSmokeTest test
+
+      - name: Build full jar
+        run: mvn -B clean package -DskipTests
